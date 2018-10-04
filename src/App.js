@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 class App extends Component {
   state = {
     newTodo: "",
@@ -12,12 +13,44 @@ class App extends Component {
     ]
   };
 
+  handleDelete = event => {
+    var newTodoList = [...this.state.todos];
+    var index = newTodoList.indexOf(event.target.value);
+    newTodoList.splice(index, 1);
+    this.setState({todos: newTodoList});
+  };
+
+  handleChange = event => {
+    this.setState({ newTodo: event.target.value });
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    this.setState({
+      todos: [...this.state.todos, this.state.newTodo],
+      newTodo: ""
+    });
+  };
+
   render() {
     return (
       <div>
         <h1> How to make boba at home</h1>
         {this.state.todos.map(todo => (
-          <li key={todo}> {todo}</li>
+          <div>
+            <li key={todo}>
+              {todo + " "}
+              <button  value={todo} onClick={this.handleDelete}>X</button>
+                <form onSubmit={this.handleSubmit}>
+                  <input
+                    type="text"
+                    value={this.state.newTodo}
+                    onChange={this.handleChange}
+                  />
+                  <button onClick={this.handleSubmit}> + </button>
+                </form>
+            </li>
+          </div>
         ))}
       </div>
     );
